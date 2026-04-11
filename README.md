@@ -1,80 +1,78 @@
-# Customer Support Voice AI Agent
+# 🎙️ Hotel-Voice-Agent-Customer-Support-Elavenlabs-n8n
 
-## Project Overview
+![n8n](https://img.shields.io/badge/Workflow-n8n-FF6C37?style=flat&logo=n8n&logoColor=white)
+![ElevenLabs](https://img.shields.io/badge/Voice-ElevenLabs-black?style=flat&logo=elevenlabs&logoColor=white)
+![OpenAI](https://img.shields.io/badge/AI-GPT--4o-412991?style=flat&logo=openai&logoColor=white)
+![Pinecone](https://img.shields.io/badge/Database-Pinecone-262730?style=flat&logo=pinecone&logoColor=white)
+![Google Drive](https://img.shields.io/badge/Source-Google_Drive-4285F4?style=flat&logo=googledrive&logoColor=white)
 
-This project implements an AI-powered voice assistant designed to provide customer support and information for the Burj Khalifa Residences & Hotel. Leveraging robust automation and AI services, it handles guest inquiries about hotel rooms, prices, amenities, and reservation policies, providing instant, conversational responses.
+---
 
-## Key Features
+## 🚀 The Solution: Autonomous Guest Intelligence
+This project features a **Fully Autonomous AI Voice Agent** specifically engineered for the **Lake View Hotel**. It addresses the challenge of scaling customer support by providing a 24/7, human-like voice interface capable of handling complex guest inquiries. 
 
-* **Voice-Enabled Interactions:** Utilizes ElevenLabs for natural language understanding and text-to-speech, enabling a seamless voice experience.
-* **Automated Workflows:** Powered by n8n, orchestrating complex interactions between AI models, knowledge bases, and external tools.
-* **Intelligent Information Retrieval:** Integrates with a Pinecone vector database to efficiently search and retrieve relevant information from a comprehensive hotel knowledge base.
-* **Dynamic Responses:** Leverages OpenAI's chat models for intelligent reasoning and generating context-aware responses.
+The agent manages real-time conversations regarding room reservations, seasonal pricing, hotel amenities, and stay policies. By utilizing a **Retrieval-Augmented Generation (RAG)** architecture, the system ensures all verbal responses are derived from the hotel's official knowledge base, providing accurate and reliable information without human intervention.
 
-## Technologies Used
+---
 
-* **ElevenLabs:** AI Voice Synthesis and Agent Platform.
-* **n8n:** Workflow Automation (Self-hosted or Cloud).
-* **Pinecone:** Vector Database for scalable information retrieval.
-* **OpenAI:** For Embeddings (text-to-vector conversion) and Chat Models (AI reasoning).
-* **Google Drive:** As the source for the knowledge base document.
+## ✅ Problems Solved
+- **Eliminating Wait Times:** Guests no longer need to wait for a front-desk operator for basic information or reservation queries.
+- **Consistency in Support:** Every guest receives the same high-quality, polite, and accurate information regardless of the time of day.
+- **Automated Knowledge Sync:** When hotel policies or room prices change in the master Google Doc, the Voice AI updates its knowledge automatically via the ingestion pipeline, ensuring it never gives outdated information.
 
-## System Architecture
+---
 
-Here's a high-level overview of how the Customer Support AI Agent works:
+## 🖼️ System Architecture
 
-1.  **Voice Input (ElevenLabs):** A guest speaks their query to the ElevenLabs voice agent.
-2.  **Tool Invocation (ElevenLabs):** ElevenLabs' LLM identifies the need for information and invokes a configured tool to send the user's question to n8n.
-3.  **Workflow Trigger (n8n - Voice Agent):** An n8n workflow (`voice-agent-workflow.json`) receives the user's question via a webhook.
-4.  **AI Reasoning & Knowledge Retrieval (n8n - AI Agent Node):**
-    * The n8n AI Agent node uses an OpenAI Chat Model for reasoning.
-    * It accesses a Pinecone Vector Store tool to search for relevant information within the hotel's knowledge base.
-    * OpenAI Embeddings are used to convert query text into vectors for Pinecone search.
-5.  **Response Generation (n8n):** The AI Agent node formulates a concise answer based on the retrieved information.
-6.  **Voice Output (n8n & ElevenLabs):** The n8n workflow sends the AI's textual response back to ElevenLabs, which converts it into natural-sounding speech for the guest.
+### 1. Conversational Voice Pipeline (ElevenLabs + n8n)
+The core interaction engine where voice input is processed, analyzed, and answered in real-time.
+<div align="center">
+  <img src="images/n8n-voice-agent-overview.jpeg" width="100%" alt="n8n Voice Agent Architecture" style="border-radius:10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);"/>
+</div>
 
-### Data Ingestion Workflow:
+### 2. Knowledge Ingestion & Vectorization (Data Pipeline)
+The backend process that syncs the Lake View Hotel's documentation with the AI's long-term vector memory.
+<div align="center">
+  <img src="images/n8n-info-loader-overview.jpeg" width="100%" alt="n8n Info Loader Architecture" style="border-radius:10px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);"/>
+</div>
 
-The knowledge base is maintained and updated via a separate n8n workflow:
+---
 
-1.  **Knowledge Base Source (Google Drive):** Hotel information is stored in a Google Doc.
-2.  **Data Loader (n8n - Info Loader):** The [`info-loader-workflow.json`](workflows/info-loader-workflow.json) is triggered manually (or on a schedule) to download the Google Doc content from Google Drive.
-3.  **Text Processing (n8n):** The document content is processed by a Default Data Loader and then split into smaller, manageable chunks using a Recursive Character Text Splitter.
-4.  **Embedding (n8n):** Each text chunk is converted into numerical vector embeddings using OpenAI Embeddings.
-5.  **Vector Storage (Pinecone):** These embeddings are then uploaded to the Pinecone vector database, making them searchable by the AI agent.
+## 🧠 Core Technical Pillars
 
-## Project Setup & Files
+### 1. 🗣️ High-Fidelity Voice Synthesis (ElevenLabs)
+The system utilizes **ElevenLabs** for industry-leading voice quality. It doesn't just read text; it understands the emotional context of the guest's question. When a query requires specific hotel data, the ElevenLabs agent triggers a custom **n8n tool**, bridging the gap between natural conversation and structured data retrieval.
 
-This repository contains all the necessary files to understand and recreate the Customer Support AI Agent.
+### 2. 🔍 RAG-Driven Intelligence (Pinecone Vector DB)
+To ensure the agent provides specific details about the **Lake View Hotel** (and not generic AI guesses), it uses **Retrieval-Augmented Generation**:
+- **Semantic Search:** The agent converts guest questions into vectors to find the most relevant information in the **Pinecone** database.
+- **Fact-Grounded Responses:** The AI only answers based on the retrieved data, eliminating "hallucinations."
 
-* `workflows/`: Contains the n8n workflow `.json` files.
-    * [`voice-agent-workflow.json`](workflows/voice-agent-workflow.json): The primary workflow for handling live user interactions.
-    * [`info-loader-workflow.json`](workflows/info-loader-workflow.json): The workflow responsible for loading and embedding knowledge base content into Pinecone.
-* `images/`: Visual aids for understanding the n8n workflows.
-  
+### 3. 🔄 Recursive Knowledge Sync (Google Drive Ingestion)
+The "Info Loader" workflow automates the maintenance of the hotel's knowledge base. It pulls the latest guidelines and rates from **Google Drive**, processes the text through a **Recursive Character Splitter**, and updates the vector embeddings via **OpenAI**. 
 
-    ![n8n Voice Agent Overview](images/n8n-voice-agent-overview.jpeg) - Overview of the voice agent workflow.
-      
-  
-    ![n8n Info Loader Overview](images/n8n-info-loader-overview.jpeg) - Overview of the information loader workflow.
-      
-   
-* `knowledge-base/`: The textual content of the hotel's knowledge base.
-    * [`burj-khalifa-guide.md`](knowledge-base/burj-khalifa-guide.md): The comprehensive guide for Burj Khalifa Residences & Hotel information.
-* `elevenlabs-prompts/`: Configuration details for the ElevenLabs AI agent.
-    * [`elevenlabs-setup-guide.md`](elevenlabs-prompts/elevenlabs-setup-guide.md): A guide detailing the ElevenLabs agent setup, including the system prompt, initial greeting, and n8n tool configuration.
+### 4. 🧠 Agentic Reasoning (GPT-4o Controller)
+Inside the n8n ecosystem, the **AI Agent Node** (powered by GPT-4o) acts as the brain. It evaluates the guest's request, decides which database tools to call, and formats the technical findings into a warm, hospitable, and concise verbal response.
 
+---
 
-## How to Set Up (High-Level Steps)
+## 🛠️ Technical Stack
+| Layer | Technology |
+| :--- | :--- |
+| **🔄 Automation** | n8n (State Management & API Orchestration) |
+| **🎙️ Voice Interface** | ElevenLabs (Conversational Voice AI) |
+| **🧠 AI Brain** | OpenAI GPT-4o (Reasoning & Embeddings) |
+| **💾 Vector Store** | Pinecone (High-speed Semantic Search) |
+| **📂 Source Data** | Google Drive (Dynamic Knowledge Base) |
 
-1.  **n8n Setup:**
-    * Import `info-loader-workflow.json` into your n8n instance.
-    * Configure the Google Drive node to access your knowledge base document.
-    * Configure OpenAI Embedding and Pinecone nodes with your API keys and index name.
-    * Run this workflow once to load your knowledge base into Pinecone.
-    * Import `voice-agent-workflow.json` into your n8n instance.
-    * Configure the OpenAI Chat Model and Pinecone Vector Store tool nodes with your API keys and index name.
-    * Activate the webhook for this workflow (its URL will be used in ElevenLabs).
-2.  **ElevenLabs Setup:**
-    * Follow the detailed steps in `elevenlabs-prompts/elevenlabs-setup-guide.md` to configure your ElevenLabs agent, including the system prompt, initial greeting, and the tool integration pointing to your n8n URL.
-3.  **Testing:** Interact with your ElevenLabs agent to test the end-to-end functionality.
+---
+
+## ✍️ Author
+**Muneeb Ali Khan**
+- **GitHub:** [@Muneeb20019](https://github.com/Muneeb20019)
+- **LinkedIn:** [Muneeb Ali Khan](https://www.linkedin.com/in/muneeb-ali-khan-2a1675365)
+
+---
+
+## 📜 License
+This project is licensed under the MIT License.
