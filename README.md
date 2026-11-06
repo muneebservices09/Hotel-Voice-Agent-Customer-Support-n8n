@@ -69,7 +69,6 @@ Inside the n8n ecosystem, the **AI Agent Node** (powered by GPT-4o) acts as the 
 
 ## ✍️ Author
 **Muneeb Ali Khan**
-- **GitHub:** [@Muneeb20019](https://github.com/Muneeb20019)
 - **LinkedIn:** [Muneeb Ali Khan](https://www.linkedin.com/in/muneeb-ali-khan-2a1675365)
 
 ---
